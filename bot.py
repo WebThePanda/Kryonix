@@ -148,7 +148,7 @@ async def reloadCog(ctx, cog):
     elif ctx.channel.id != cogChannelID:
         await ctx.send(f"Wrong channel. Please try again in {cogChannel.mention}.")
     else:
-        if cog == "all":
+        if cog.lower() == "all":
             for cog in COGS:
                 await bot.reload_extension(cog)
 

@@ -11,9 +11,10 @@ class Moderation(commands.Cog):
         await ctx.send(f"Kicked {member.mention}")
 
     @commands.command()
-    async def unban(self, ctx, member: discord.Member):
-        await member.unban()
-        await ctx.send(f"Unbanned {member.mention}")
+    async def unban(self, ctx, userID: int):
+        user = await self.bot.fetch_user(userID)
+        await ctx.guild.unban(user)
+        await ctx.send(f"Unbanned {user.mention}")
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
