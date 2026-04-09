@@ -12,6 +12,8 @@ botToken = os.getenv("token")
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
+intents.messages = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -21,6 +23,7 @@ COGS = [
     "cogs.game",
     "cogs.levels",
     "cogs.moderation",
+    "cogs.trap",
 ]
 
 async def load_cogs():
@@ -30,6 +33,10 @@ async def load_cogs():
             print(f"✅ Loaded {cog}")
         except Exception as e:
             print(f"❌ Failed to load {cog}: {e}")
+
+@bot.event
+async def on_member_join(member):
+    print(f"BARE EVENT FIRED: {member.name}")
 
 @bot.event
 async def on_ready():
