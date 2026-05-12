@@ -4,6 +4,7 @@ import asyncio
 import os
 from dotenv import load_dotenv
 import time
+from utils.premium import activatePremium, serverHasPremium
 
 try:
     load_dotenv()
@@ -178,22 +179,22 @@ try:
     async def on_ready():
         print(f"Logged in as {bot.user} (ID: {bot.user.id})")
         print("------")
-        if not my_background_task.is_running():
-            my_background_task.start()
 
-    @tasks.loop(seconds=600.0)
-    async def my_background_task():
-        global loop
-        loop += 1
-        channel = bot.get_channel(1487855603123617804)
-        if channel:
-            await channel.send(f"Loop number {loop}")
+    @bot.command(name="activate-premium")
+    async def activatepremium(ctx):
+        guildID = ctx.guild.id
+        guildName = bot.get_guild(guildID)
+        userID = ctx.author.id
+        kryonix = 1487855601735172262
+        frostbound = 1487859781442998456
+        
+        
+        try:
+            activatePremium(guildID=guildID, userID=userID)
 
-    @my_background_task.before_loop
-    async def before_my_task():
-        await bot.wait_until_ready()
-        channel = await bot.fetch_channel(1487855603123617804)
-        await channel.send("Starting loop")
+            await ctx.send(f"**Premium Activated in {guildName}!**\nThank you {userID} for supporting Kryonix")
+        except Exception as e:
+            await ctx.send(f"**ERROR:** Could not activate premium.\n Make a ticket in [Kryonix](https://discord.gg/hagRvXcyUT) and send this error message: {e}.")
 
     async def main():
         async with bot:
@@ -203,4 +204,4 @@ try:
     asyncio.run(main())
 
 except KeyboardInterrupt:
-    print("\nStopped by User")
+    print("\nStopped by Terminal")
